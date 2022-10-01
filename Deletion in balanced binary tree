@@ -1,0 +1,159 @@
+#include<iostream>
+using namespace std;
+class node
+{
+           public:
+                        int data;
+                        node *left,*right;
+                        int hgt,bal;
+};
+node* newnode(int x)
+{
+           node *temp=new node;
+           temp->data=x;
+           temp->left=NULL;
+           temp->right=NULL;
+           temp->bal=0;
+           temp->hgt=1;
+           return temp;
+}
+int height(node *root)
+{
+           if(root->left==NULL && root->right==NULL)
+                      return 1;
+           else
+           {
+                      int l,r;
+                      if(root->left!=NULL)
+                                 l=height(root->left);
+                      if(root->right!=NULL)
+                                 r=height(root->right);
+                      if(l>r)
+                                 return l+1;
+                      else
+                                 return r+1;
+           }
+}
+int balance(node *root)
+{
+           if(root==NULL)
+                      return 0;
+           else
+                      return height(root->left)-height(root->right);
+}node* left_rotate(node *root)
+{
+           node *x=root->right;
+           node *y=x->left;
+           x->left=root;
+           root->right=y;
+           x->hgt=height(x);
+           y->hgt=height(y);
+           return x;
+}
+node* right_rotate(node* root)
+{
+           node* x=root->left;
+           node* y=x->right;
+           x->right=root;
+           root->left=y;
+           x->hgt=height(x);
+           y->hgt=height(y);
+           return x;
+}
+node* insert_node(node *root,int x)
+{
+           if(root==NULL)
+                      return newnode(x);
+           if(x<root->data)
+                      root->left=insert_node(root->left,x);
+           else
+                      root->right=insert_node(root->right,x);
+           root->hgt=height(root);
+           root->bal=balance(root);
+           if(root->bal>1 && x<root->left->data)
+                      return right_rotate(root);
+           if(root->bal<-1 && x>root->right->data)
+                      return left_rotate(root);
+           if(root->bal>1 && x>root->left->data)
+           {
+                      root->left=left_rotate(root->left);
+                      return right_rotate(root);
+           }
+           if(root->bal<-1 && x<root->right->data)
+           {
+                      root->right=right_rotate(root->right);
+                      return left_rotate(root);
+           }
+           return root;
+}
+node* largest(node *root)
+{
+           node *temp=root;
+           while(temp!=NULL)
+                      temp=temp->right;
+           return temp;
+}
+node* delete_node(node *root,int x)
+{
+           if(root==NULL)
+                      return root;
+           if(x<root->data)
+                      return delete_node(root->left,x);
+           else if(x>root->data)
+                      return delete_node(root->right,x);
+           else
+           {
+                      if(root->left==NULL && root->right==NULL)
+                                 free(root);
+                      else if(!root->left)
+                                 root=root->right;
+                      else if(!root->right)
+                                 root=root->left;
+                      else
+                      {
+                                 node *temp=largest(root->left);
+                                 root=temp;
+                                 return delete_node(root->left,temp->data);
+                      }
+           }
+           root->hgt=height(root);
+           root->bal=balance(root);
+           if(root->bal>1 && x<root->left->data)
+                      return right_rotate(root);
+           if(root->bal<-1 && x>root->right->data)
+                      return left_rotate(root);
+           if(root->bal>1 && x>root->left->data)
+           {
+                      root->left=left_rotate(root->left);
+                      return right_rotate(root);
+           }
+           if(root->bal<-1 && x<root->right->data)
+           {
+                      root->right=right_rotate(root->right);
+                      return left_rotate(root);
+           }
+           return root;
+}
+void traversal(node* root)
+{
+           if(root!=NULL)
+           {
+                      cout<<root->data<<" ";
+                      traversal(root->left);
+                      traversal(root->right);
+           }
+}
+int main()
+{
+           node *root=insert_node(root,1);
+           root=insert_node(root,2);
+           root=insert_node(root,3);
+           root=insert_node(root,4);
+           root=insert_node(root,5);
+           root=insert_node(root,6);
+           traversal(root);
+           root=delete_node(root,2);
+           cout<<endl;
+           traversal(root);
+           return 0;
+}
