@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void merge(vector<int>& nums , int left , int mid , int right) {
+	int i = left;
+	int j = mid + 1;
+	int k = left;
+	int arr[right + 1];
+
+	while (i <= mid && j <= right) {
+		if (nums[i] < nums[j]) {
+			arr[k++] = nums[i++];
+		} else {
+			arr[k++] = nums[j++];
+		}
+	}
+	while (i <= mid) {
+		arr[k++] = nums[i++];
+	}
+	while (j <= right) {
+		arr[k++] = nums[j++];
+	}
+	for (int i = left; i <= right; i++) {
+		nums[i] = arr[i];
+	}
+}
+
+void mergesort(vector<int>& nums, int left , int right) {
+	if (left < right) {
+		int mid  = (left + right) / 2;
+		mergesort(nums , left , mid);
+		mergesort(nums , mid + 1 , right);
+		merge(nums , left , mid , right);
+	}
+}
+int main() {
+	vector<int>nums = {13, 33, 43, 16, 25, 19, 23, 31, 29, 35, 10, 2, 32, 11, 47, 15, 34, 46};
+	mergesort(nums, 0 , nums.size() - 1);
+	for (int i = 0; i < nums.size(); i++) {
+		cout << nums[i] << endl;
+	}
+}
