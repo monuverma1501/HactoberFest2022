@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int romanToDecimal(string &str)
+{
+    int Soln=0;
+    unordered_map<char,int>nums;
+    
+    nums['I']=1;
+    nums['V']=5;
+    nums['X']=10;
+    nums['L']=50;
+    nums['C']=100;
+    nums['D']=500;
+    nums['M']=1000;
+    
+    for(int i=str.size()-1; i>=0; i--)
+    {
+        if(i<str.size()-1 && nums[str[i]]<nums[str[i+1]])
+            Soln-=nums[str[i]];
+        else
+            Soln+=nums[str[i]];
+    }
+    return Soln;
+   }
+};
