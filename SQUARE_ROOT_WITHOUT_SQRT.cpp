@@ -1,44 +1,62 @@
-// Contributed by lucy2512 (https://github.com/lucy2512)
+// Contributed by shrutigupta03 (https://github.com/shrutigupta03)
 
-#include <iostream>
+// C++ implementation of the approach
+#include <bits/stdc++.h>
 using namespace std;
-
-
-
-double SqrtNumber(double num)
+ 
+// Recursive function that returns square root
+// of a number with precision upto 5 decimal places
+double Square(double n, double i, double j)
 {
-        double lower_bound = 0;
-        double upper_bound = num;
-        double temp = 0;
-
-        int nCount = 50;
-
-        while (nCount != 0)
-        {
-                temp = (lower_bound + upper_bound) / 2;
-                if (temp * temp == num)
-                {
-                        return temp;
-                }
-                else if (temp * temp > num)
-                {
-                        upper_bound = temp;
-                }
-                else
-                {
-                        lower_bound = temp;
-                }
-                nCount--;
-        }
-        return temp;
+    double mid = (i + j) / 2;
+    double mul = mid * mid;
+ 
+    // If mid itself is the square root,
+    // return mid
+    if ((mul == n) || (abs(mul - n) < 0.00001))
+        return mid;
+ 
+    // If mul is less than n, recur second half
+    else if (mul < n)
+        return Square(n, mid, j);
+ 
+    // Else recur first half
+    else
+        return Square(n, i, mid);
 }
-
+ 
+// Function to find the square root of n
+void findSqrt(double n)
+{
+    double i = 1;
+ 
+    // While the square root is not found
+    bool found = false;
+    while (!found) {
+ 
+        // If n is a perfect square
+        if (i * i == n) {
+            cout << fixed << setprecision(0) << i;
+            found = true;
+        }
+        else if (i * i > n) {
+ 
+            // Square root will lie in the
+            // interval i-1 and i
+            double res = Square(n, i - 1, i);
+            cout << fixed << setprecision(5) << res;
+            found = true;
+        }
+        i++;
+    }
+}
+ 
+// Driver code
 int main()
 {
-        double num;
-        cout << "Enter the number: ";
-        cin >> num;
-
-        cout << "Square root is:" << SqrtNumber(num);
-        return 0;
+    double n = 3;
+ 
+    findSqrt(n);
+ 
+    return 0;
 }
