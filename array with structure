@@ -1,0 +1,33 @@
+#include<iostream>
+#include<conio.h>
+#include<stdio.h>
+
+struct student
+{
+    int rno;
+    char name[25];
+    float marks[5];
+};
+void main()
+{
+     clrscr();
+     int i;
+     student s;
+     cout<<"Enter Roll number :";
+     cin>>s.rno;
+     cout<<"Enter Name :";
+     fflush(stdin);
+     gets(s.name);
+     for(i=0;i<5;i++)
+     {
+         cout<<"Enter marks-"<<(i+1)<<" : ";
+         cin>>s.marks[i];
+     }
+     cout<<"\n Roll Number :'<<s.rno;
+     cout<<"\n Name :" <<s.name;
+     for(i=0;i<5;i++)
+     {
+        cout<<"\n Marks-"<<(i+1)<<" : "<<s.marks[i];
+     }
+     getch();
+}
